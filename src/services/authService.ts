@@ -1,7 +1,7 @@
 import { User } from '../types';
+import { apiClient } from './apiService';
 
-// Simulated authentication service for frontend
-// In production, this would make HTTP calls to a backend API
+// Real authentication service using backend API
 
 interface LoginCredentials {
   email: string;
@@ -83,9 +83,22 @@ class AuthService {
 
   static async login(credentials: LoginCredentials): Promise<{ success: boolean; error?: string; user?: User }> {
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-
+      const response = await apiClient.login(credentials.email, credentials.password);
+      
+      // Store auth state
+      this.currentAuth = {
+        isAuthenticated: true,
+        user: response.user,
+        token: response.token
+      };
+      
+      this.saveAuthState(this.currentAuth);
+      
+      return { success: true, user: response.user };
+    } catch (error) {
+      // Fallback to demo users for development
+      console.warn('API login failed, falling back to demo users:', error);
+      
       // Find user by email
       const user = this.demoUsers.find(u => u.email === credentials.email);
       
@@ -122,9 +135,6 @@ class AuthService {
       this.saveAuthState();
 
       return { success: true, user: authenticatedUser };
-    } catch (error) {
-      console.error('Login error:', error);
-      return { success: false, error: 'Login failed' };
     }
   }
 

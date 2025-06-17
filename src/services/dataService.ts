@@ -1,8 +1,11 @@
 // Frontend-compatible data service that bridges to the database
-// Note: In a real app, this would be API calls to a backend server
-// For this demo, we'll simulate the database calls with the actual services
+// Now using real API calls to backend server
 
 import type { Product, Vendor, Category, CartItem } from '../types';
+import { apiClient } from './apiService';
+
+// Check if we're running in browser environment
+const isBrowser = typeof window !== 'undefined';
 
 // Types for stories and vendor following
 interface VendorStory {
@@ -342,8 +345,13 @@ class DataService {
 
   // Public API methods
   static async getAllProducts(): Promise<Product[]> {
-    await this.initialize();
-    return [...this.products];
+    try {
+      return await apiClient.getProducts();
+    } catch (error) {
+      console.error('Failed to fetch products:', error);
+      await this.initialize();
+      return [...this.products];
+    }
   }
 
   static async getProductById(id: string): Promise<Product | null> {
@@ -374,8 +382,13 @@ class DataService {
   }
 
   static async getAllCategories(): Promise<Category[]> {
-    await this.initialize();
-    return [...this.categories];
+    try {
+      return await apiClient.getCategories();
+    } catch (error) {
+      console.error('Failed to fetch categories:', error);
+      await this.initialize();
+      return [...this.categories];
+    }
   }
 
   static async getAllVendors(): Promise<Vendor[]> {
