@@ -17,7 +17,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ activeTab, onTabCha
   // Buyer navigation tabs
   const buyerTabs = [
     { id: 'home', label: 'Home', icon: Home, path: '/' },
-    { id: 'vendors', label: 'Vendors', icon: Store, path: '/vendors' },
+    { id: 'vendors', label: 'Following', icon: Store, path: '/vendors' },
     { id: 'wishlist', label: 'Wishlist', icon: Heart, path: '/wishlist' },
     { id: 'cart', label: 'Cart', icon: ShoppingCart, path: '/cart', badge: cartItemsCount },
     { id: 'profile', label: 'Profile', icon: User, path: '/profile' },
@@ -42,6 +42,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ activeTab, onTabCha
   // Default tabs for non-authenticated users
   const guestTabs = [
     { id: 'home', label: 'Home', icon: Home, path: '/' },
+    { id: 'cart', label: 'Cart', icon: ShoppingCart, path: '/login', badge: cartItemsCount },
     { id: 'login', label: 'Sign In', icon: User, path: '/login' },
   ];
 

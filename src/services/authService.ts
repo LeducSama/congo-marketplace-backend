@@ -81,6 +81,14 @@ class AuthService {
     }
   }
 
+  private static saveAuthState() {
+    try {
+      localStorage.setItem(this.storageKey, JSON.stringify(this.currentAuth));
+    } catch (error) {
+      console.warn('Failed to save auth state:', error);
+    }
+  }
+
   static async login(credentials: LoginCredentials): Promise<{ success: boolean; error?: string; user?: User }> {
     try {
       const response = await apiClient.login(credentials.email, credentials.password);
@@ -92,7 +100,7 @@ class AuthService {
         token: response.token
       };
       
-      this.saveAuthState(this.currentAuth);
+      this.saveAuthState();
       
       return { success: true, user: response.user };
     } catch (error) {
@@ -285,14 +293,6 @@ class AuthService {
       timestamp: Date.now(),
       expires: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
     }));
-  }
-
-  private static saveAuthState(): void {
-    try {
-      localStorage.setItem(this.storageKey, JSON.stringify(this.currentAuth));
-    } catch (error) {
-      console.warn('Failed to save auth state:', error);
-    }
   }
 
   // Check if token is valid (in real app, verify JWT)

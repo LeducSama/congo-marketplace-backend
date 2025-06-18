@@ -1,6 +1,7 @@
 import React from 'react';
-import { Heart, Star, ShoppingCart, Eye, Zap } from 'lucide-react';
+import { Heart, Star, ShoppingCart, Eye, Zap, LogIn } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { Product } from '../types';
 
 interface ProductCardProps {
@@ -19,12 +20,29 @@ const ProductCard: React.FC<ProductCardProps> = ({
   isInWishlist,
 }) => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const discount = product.originalPrice 
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
 
   const handleProductClick = () => {
     navigate(`/product/${product.id}`);
+  };
+
+  const handleCartAction = () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    onAddToCart(product);
+  };
+
+  const handleWishlistAction = () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    onToggleWishlist(product.id);
   };
 
   return (
@@ -58,26 +76,33 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <button
               onClick={() => onQuickView(product)}
               className="bg-white text-gray-800 p-2 rounded-full hover:bg-primary-500 hover:text-white transition-colors"
+              title="Quick View"
             >
               <Eye className="h-5 w-5" />
             </button>
             <button
-              onClick={() => onAddToCart(product)}
+              onClick={handleCartAction}
               className="bg-white text-gray-800 p-2 rounded-full hover:bg-primary-500 hover:text-white transition-colors"
+              title={isAuthenticated ? "Add to Cart" : "Sign in to add to cart"}
             >
-              <ShoppingCart className="h-5 w-5" />
+              {isAuthenticated ? <ShoppingCart className="h-5 w-5" /> : <LogIn className="h-5 w-5" />}
             </button>
           </div>
         </div>
 
         {/* Wishlist Button */}
         <button
-          onClick={() => onToggleWishlist(product.id)}
+          onClick={handleWishlistAction}
           className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white p-2 rounded-full shadow-lg hover:scale-110 transform"
+          title={isAuthenticated ? (isInWishlist ? "Remove from wishlist" : "Add to wishlist") : "Sign in to add to wishlist"}
         >
-          <Heart 
-            className={`h-4 w-4 ${isInWishlist ? 'fill-highlight-500 text-highlight-500' : 'text-gray-600'}`} 
-          />
+          {isAuthenticated ? (
+            <Heart 
+              className={`h-4 w-4 ${isInWishlist ? 'fill-highlight-500 text-highlight-500' : 'text-gray-600'}`} 
+            />
+          ) : (
+            <LogIn className="h-4 w-4 text-gray-600" />
+          )}
         </button>
       </div>
 

@@ -95,16 +95,17 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount }) => {
 
           {/* Desktop Navigation - Role-based */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* Buyer-specific navigation */}
-            {(!isAuthenticated || user?.role === 'buyer') && (
+            {/* Authenticated buyer navigation */}
+            {isAuthenticated && user?.role === 'buyer' && (
               <>
                 <button 
                   onClick={() => navigate('/wishlist')}
                   className="p-2 text-gray-600 hover:text-primary-600 transition-colors relative"
+                  title="Wishlist"
                 >
                   <Heart className="h-6 w-6" />
                 </button>
-                <button className="p-2 text-gray-600 hover:text-primary-600 transition-colors relative">
+                <button className="p-2 text-gray-600 hover:text-primary-600 transition-colors relative" title="Notifications">
                   <Bell className="h-6 w-6" />
                   <span className="absolute -top-1 -right-1 h-4 w-4 bg-highlight-500 text-white text-xs rounded-full flex items-center justify-center">
                     3
@@ -113,6 +114,25 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount }) => {
                 <button 
                   onClick={() => navigate('/cart')}
                   className="p-2 text-gray-600 hover:text-primary-600 transition-colors relative"
+                  title="Shopping Cart"
+                >
+                  <ShoppingCart className="h-6 w-6" />
+                  {cartItemsCount > 0 && (
+                    <span className="absolute -top-1 -right-1 h-5 w-5 bg-accent-500 text-white text-xs rounded-full flex items-center justify-center">
+                      {cartItemsCount}
+                    </span>
+                  )}
+                </button>
+              </>
+            )}
+
+            {/* Guest navigation - cart only */}
+            {!isAuthenticated && (
+              <>
+                <button 
+                  onClick={() => navigate('/login')}
+                  className="p-2 text-gray-600 hover:text-primary-600 transition-colors relative"
+                  title="Sign in to access cart"
                 >
                   <ShoppingCart className="h-6 w-6" />
                   {cartItemsCount > 0 && (
@@ -273,8 +293,8 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount }) => {
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
             <div className="flex items-center justify-around py-4">
-              {/* Buyer-specific mobile navigation */}
-              {(!isAuthenticated || user?.role === 'buyer') && (
+              {/* Authenticated buyer mobile navigation */}
+              {isAuthenticated && user?.role === 'buyer' && (
                 <>
                   <button 
                     onClick={() => { navigate('/wishlist'); setIsMenuOpen(false); }}
@@ -303,6 +323,22 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount }) => {
                     )}
                   </button>
                 </>
+              )}
+
+              {/* Guest mobile navigation - cart only */}
+              {!isAuthenticated && (
+                <button 
+                  onClick={() => { navigate('/login'); setIsMenuOpen(false); }}
+                  className="flex flex-col items-center text-gray-600 hover:text-primary-600 transition-colors relative"
+                >
+                  <ShoppingCart className="h-6 w-6 mb-1" />
+                  <span className="text-xs">Cart</span>
+                  {cartItemsCount > 0 && (
+                    <span className="absolute -top-1 -right-1 h-4 w-4 bg-accent-500 text-white text-xs rounded-full flex items-center justify-center">
+                      {cartItemsCount}
+                    </span>
+                  )}
+                </button>
               )}
 
               {/* Vendor-specific mobile navigation */}

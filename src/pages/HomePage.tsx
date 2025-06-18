@@ -21,7 +21,7 @@ const HomePage: React.FC<HomePageProps> = ({
   wishlist,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const filteredProducts = selectedCategory === 'all' 
@@ -162,11 +162,29 @@ const HomePage: React.FC<HomePageProps> = ({
       <div className="bg-gradient-to-br from-primary-600 via-accent-500 to-highlight-500 text-white py-16 mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 animate-fade-in">
-            Discover Amazing Products
+            {isAuthenticated && user?.role === 'buyer' ? `Welcome back, ${user.name?.split(' ')[0]}!` :
+             !isAuthenticated ? 'Welcome to MarketPlace Pro' : 'Discover Amazing Products'}
           </h1>
           <p className="text-xl md:text-2xl opacity-90 mb-8 animate-slide-up">
-            From trusted vendors worldwide
+            {isAuthenticated && user?.role === 'buyer' ? 'Ready to find your next favorite product?' :
+             !isAuthenticated ? 'Discover amazing products from trusted vendors worldwide' : 'From trusted vendors worldwide'}
           </p>
+          {!isAuthenticated && (
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 animate-slide-up">
+              <button 
+                onClick={() => navigate('/register')}
+                className="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              >
+                Join Now - It's Free!
+              </button>
+              <button 
+                onClick={() => navigate('/login')}
+                className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary-600 transition-colors"
+              >
+                Sign In
+              </button>
+            </div>
+          )}
           <div className="flex justify-center space-x-4 animate-slide-up">
             <div className="text-center">
               <div className="text-2xl font-bold">10K+</div>
@@ -185,6 +203,29 @@ const HomePage: React.FC<HomePageProps> = ({
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        {/* Guest Browse Notice */}
+        {!isAuthenticated && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <User className="h-5 w-5 text-blue-600" />
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-blue-800">
+                  <strong>Browsing as guest:</strong> You can view products, but{' '}
+                  <button 
+                    onClick={() => navigate('/login')}
+                    className="underline hover:text-blue-900 font-medium"
+                  >
+                    sign in
+                  </button>{' '}
+                  to add items to cart or wishlist.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Category Filter */}
         <CategoryFilter
           selectedCategory={selectedCategory}

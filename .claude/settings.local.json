@@ -6,7 +6,11 @@
       "Bash(npm install:*)",
       "Bash(npm run build:*)",
       "Bash(find:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "WebFetch(domain:project-congo-sell-test-mtxs09c06-leducsamas-projects.vercel.app)",
+      "Bash(git rm:*)",
+      "Bash(rm:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }

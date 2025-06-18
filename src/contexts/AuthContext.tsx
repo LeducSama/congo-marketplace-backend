@@ -44,6 +44,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const initializeAuth = async () => {
     try {
+      // Initialize AuthService first
+      AuthService.initialize();
+      
       // Check if user is already logged in
       const currentUser = AuthService.getCurrentUser();
       const isAuthenticated = AuthService.isAuthenticated();
