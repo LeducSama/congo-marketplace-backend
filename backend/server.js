@@ -34,6 +34,8 @@ app.use(cors({
   origin: [
     'http://localhost:5173',
     'https://project-congo-sell-test-l2n24f0gw-leducsamas-projects.vercel.app',
+    'https://project-congo-sell-test-b3bxtrwun-leducsamas-projects.vercel.app',
+    /^https:\/\/project-congo-sell-test-.*\.vercel\.app$/,
     process.env.FRONTEND_URL
   ].filter(Boolean),
   credentials: true
