@@ -155,6 +155,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     hasAnyRole
   };
 
+  // Debug authentication state
+  console.log('AuthContext - Current state:', { user, isAuthenticated: !!user, loading });
+
   return (
     <AuthContext.Provider value={value}>
       {children}

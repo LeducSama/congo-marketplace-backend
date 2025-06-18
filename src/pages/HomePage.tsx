@@ -24,6 +24,9 @@ const HomePage: React.FC<HomePageProps> = ({
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
+  // Debug authentication state
+  console.log('HomePage - Authentication state:', { user, isAuthenticated });
+
   const filteredProducts = selectedCategory === 'all' 
     ? products 
     : products.filter(product => product.category === selectedCategory);
