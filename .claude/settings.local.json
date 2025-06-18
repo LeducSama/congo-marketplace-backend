@@ -10,7 +10,8 @@
       "WebFetch(domain:project-congo-sell-test-mtxs09c06-leducsamas-projects.vercel.app)",
       "Bash(git rm:*)",
       "Bash(rm:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git push:*)"
     ],
     "deny": []
   }

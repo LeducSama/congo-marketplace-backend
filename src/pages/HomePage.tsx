@@ -5,7 +5,7 @@ import CategoryFilter from '../components/CategoryFilter';
 import { Product } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Plus, TrendingUp, Package, Users } from 'lucide-react';
+import { Plus, TrendingUp, Package, Users, User } from 'lucide-react';
 
 interface HomePageProps {
   onQuickView: (product: Product) => void;
